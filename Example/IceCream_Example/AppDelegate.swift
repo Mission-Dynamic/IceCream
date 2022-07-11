@@ -11,11 +11,12 @@ import IceCream
 import CloudKit
 import RealmSwift
 
+var syncEngine: SyncEngine?
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var syncEngine: SyncEngine?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -23,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             SyncObject(type: Dog.self),
             SyncObject(type: Cat.self),
             SyncObject(type: Person.self, uListElementType: Cat.self)
-            ])
+        ], databaseScope: .private)
         
         /// If you wanna test public Database, comment the above syncEngine code and uncomment the following one
         /// Besides, uncomment Line 26 to 28 in Person.swift file

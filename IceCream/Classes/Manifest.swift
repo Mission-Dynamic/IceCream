@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 /// This file is for setting some develop configs for IceCream framework.
 
@@ -18,6 +19,7 @@ public class IceCream {
     /// The default value is true.
     public var enableLogging: Bool = true
     
+    public var isSyncingPublisher = CurrentValueSubject<Bool, Never>(false)
 }
 
 /// If you want to know more,

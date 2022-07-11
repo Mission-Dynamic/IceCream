@@ -6,6 +6,7 @@
 //
 
 import CloudKit
+import Combine
 
 protocol DatabaseManager: class {
     
@@ -109,6 +110,8 @@ extension DatabaseManager {
         // If you want to handle partial failures, set .isAtomic to false and implement CKOperationResultType .fail(reason: .partialFailure) where appropriate
         modifyOpe.isAtomic = true
         
+        IceCream.shared.isSyncingPublisher.send(true)
+        
         modifyOpe.modifyRecordsCompletionBlock = {
             [weak self]
             (_, _, error) in
@@ -120,6 +123,7 @@ extension DatabaseManager {
                 DispatchQueue.main.async {
                     completion?(nil)
                 }
+                IceCream.shared.isSyncingPublisher.send(false)
             case .retry(let timeToWait, _):
                 ErrorHandler.shared.retryOperationIfPossible(retryAfter: timeToWait) {
                     self.syncRecordsToCloudKit(recordsToStore: recordsToStore, recordIDsToDelete: recordIDsToDelete, completion: completion)

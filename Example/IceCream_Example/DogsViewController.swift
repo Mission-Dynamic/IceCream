@@ -11,12 +11,14 @@ import RealmSwift
 import IceCream
 import RxRealm
 import RxSwift
+import Combine
 
 final class DogsViewController: UIViewController {
     
     private let jim = Person()
     private var dogs: [Dog] = []
     private let bag = DisposeBag()
+    private var store = Set<AnyCancellable>()
     
     private let realm = try! Realm()
     
@@ -38,6 +40,12 @@ final class DogsViewController: UIViewController {
         
         view.addSubview(tableView)
         navigationItem.rightBarButtonItem = addBarItem
+        
+        IceCream.shared.isSyncingPublisher
+            .sink { newValue in
+                print("Is Syncing: \(newValue)")
+            }
+            .store(in: &store)
         
         bind()
     }
